@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kopikulo – Kopi 250 g Isi 25 Drip Bag dari Kulon Progo</title>
+  <meta name="description" content="Kopikulo, kopi UMKM dari Kulon Progo. Pilih Classic, Mix, Berry, Grape, atau Durian Espresso 250 g, tiap kemasan berisi 25 drip bag. Pesan lewat WhatsApp.">
+  <meta name="theme-color" content="#1E2B58">
+
+  <!--
+    ASET: simpan gambar terlampir di folder assets/ dengan nama berikut (dipakai apa adanya):
+      assets/logo-kopikulo.png   (logo cangkir oranye)
+      assets/kopi-classic.png  kopi-mix.png  kopi-berry.png  kopi-grape.png  kopi-durian.png  (kemasan 250 g)
+      assets/drip-bag-mixed.png  (5 sachet)
+      assets/mug-drip.png        (mug + drip bag)
+  -->
+  <link rel="icon" href="assets/logo-kopikulo.png" type="image/png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#F3EBE1',
+            navy: '#1E2B58',
+            orange: '#FF5C39',
+            // Oranye lebih tua khusus teks/tombol kecil agar lolos kontras AA (#FF5C39 di atas krem hanya 2.6:1)
+            'orange-deep': '#B8330F',
+            gold: '#E3B04B',
+          },
+          fontFamily: {
+            serif: ['Fraunces', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    /* Gambar kemasan: kanvas asli punya ruang kosong, jadi dipotong ke kemasan tanpa kotak. */
+    .pack-frame { position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
+    .pack-img { position: absolute; left: 50%; top: 50%; width: 210%; max-width: none; transform: translate(-50%, -50%); mix-blend-mode: multiply; }
+    [hidden] { display: none !important; }
+    .blend { mix-blend-mode: multiply; }
+    .stage-img { position: absolute; max-width: none; transform: translate(-50%, -50%); }
+    /* Header: krem saat di atas (teks navy, kontras 11:1), navy saat di-scroll (teks putih, kontras 13:1) */
+    .site-header { background: #F3EBE1; color: #1E2B58; transition: background-color .2s, box-shadow .2s; }
+    .site-header.is-scrolled { background: #1E2B58; color: #fff; box-shadow: 0 2px 12px rgba(30,43,88,.25); }
+    .site-header nav a:hover { color: #B8330F; }
+    .site-header.is-scrolled nav a:hover { color: #E3B04B; }
+    .site-header:not(.is-scrolled) :focus-visible { outline-color: #1E2B58; }
+
+    /* Slider varian: tampil 2 di HP, 3 di tablet/desktop; geser 1 item per langkah */
+    .slider { --per: 2; --gap: 16px; }
+    @media (min-width: 768px) { .slider { --per: 3; --gap: 28px; } }
+    .slider-track { display: flex; gap: var(--gap); overflow-x: auto; padding: 4px; scroll-padding-inline: 4px; scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; scrollbar-width: none; }
+    .slider-track::-webkit-scrollbar { display: none; }
+    .slide { flex: 0 0 calc((100% - var(--gap) * (var(--per) - 1)) / var(--per)); scroll-snap-align: start; scroll-snap-stop: always; }
+
+    /* Tombol Pesan: sorot saat sudah ada item */
+    .site-header .btn-pesan.has-items { box-shadow: 0 0 0 2px #F3EBE1, 0 0 0 4px #1E2B58; }
+    .site-header.is-scrolled .btn-pesan.has-items { box-shadow: 0 0 0 2px #1E2B58, 0 0 0 4px #E3B04B; }
+    .bar-btn.has-items { background: #E3B04B; color: #1E2B58; }
+    .bar-btn.has-items [data-count-text] { background: #1E2B58; color: #fff; }
+    @keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.08); } 100% { transform: scale(1); } }
+    @media (prefers-reduced-motion: no-preference) { .bump { animation: bump .45s ease; } }
+    @media (prefers-reduced-motion: reduce) { .slider-track { scroll-behavior: auto; } }
+    :focus-visible { outline: 3px solid #1E2B58; outline-offset: 3px; }
+    .on-navy :focus-visible, header :focus-visible, footer :focus-visible { outline-color: #E3B04B; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto !important; } * { transition: none !important; } }
+  </style>
+</head>
+
+<body class="bg-cream font-sans text-navy antialiased">
+  <a href="#kopi" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[60] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:font-semibold">Lewati ke konten</a>
+
+  <!-- NAVBAR -->
+  <header id="site-header" class="site-header sticky top-0 z-50">
+    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+      <a href="#" class="flex items-center gap-2.5" aria-label="Kopikulo, ke atas halaman">
+        <img src="assets/logo-kopikulo.png" alt="Logo Kopikulo: cangkir kopi beruap" width="40" height="40" class="h-9 w-9">
+        <span class="text-lg font-bold tracking-wider">KOPIKULO</span>
+      </a>
+      <nav aria-label="Menu utama" class="hidden md:block">
+        <ul class="flex items-center gap-8 text-[15px] font-medium">
+          <li><a class="py-2 hover:text-gold" href="#kopi">Kopi</a></li>
+          <li><a class="py-2 hover:text-gold" href="#drip">Drip bag</a></li>
+          <li><a class="py-2 hover:text-gold" href="#cerita">Cerita</a></li>
+          <li><a class="py-2 hover:text-gold" href="#cara-pesan">Cara pesan</a></li>
+        </ul>
+      </nav>
+      <button type="button" data-open-cart class="btn-pesan inline-flex h-11 items-center gap-2 rounded-full bg-orange-deep px-5 text-[15px] font-bold text-white hover:bg-[#9d2b0b]">
+        Pesan
+        <span data-count-badge hidden class="grid h-6 min-w-6 place-items-center rounded-full bg-gold px-1.5 text-xs font-bold text-navy">0</span>
+        <span class="sr-only">, buka daftar pesanan</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="mx-auto max-w-6xl px-4 pb-10 pt-10 sm:px-6 md:pb-16 md:pt-16" aria-labelledby="hero-title">
+      <div class="grid items-center gap-8 md:grid-cols-2 md:gap-4">
+        <div>
+          <p class="mb-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.18em] text-orange-deep">
+            <span class="h-0.5 w-8 bg-orange" aria-hidden="true"></span> Dari Kulon Progo
+          </p>
+          <h1 id="hero-title" class="font-serif text-5xl font-bold leading-[1.05] text-navy sm:text-6xl lg:text-7xl">
+            Good coffee,<br><span class="text-orange-deep">better days.</span>
+          </h1>
+          <p class="mt-5 max-w-md text-lg leading-relaxed text-navy/85">
+            Kopi 250 g, isi 25 drip bag di tiap kemasan. Pilih rasa, tentukan jumlah, pesan lewat WhatsApp.
+          </p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href="#kopi" class="inline-flex h-12 items-center rounded-full bg-orange-deep px-7 text-base font-bold text-white hover:bg-[#9d2b0b]">Pilih kopimu</a>
+            <a href="#drip" class="inline-flex h-12 items-center rounded-full border-2 border-navy px-7 text-base font-bold text-navy hover:bg-navy hover:text-white">Lihat drip bag</a>
+          </div>
+        </div>
+
+        <!-- Tiga kemasan besar, tanpa kotak -->
+        <div class="relative mx-auto aspect-[5/4] w-full max-w-xl overflow-hidden md:max-w-none" role="group" aria-label="Kemasan kopi Kopikulo">
+          <img src="assets/kopi-classic.png" alt="Kemasan Kopikulo Classic Espresso, label navy" class="stage-img z-10" style="left:20%;top:54%;width:92%" width="1250" height="833" loading="eager">
+          <img src="assets/kopi-durian.png" alt="Kemasan Kopikulo Durian Espresso, label hijau" class="stage-img z-10" style="left:80%;top:54%;width:92%" width="1080" height="720" loading="eager">
+          <img src="assets/kopi-mix.png" alt="Kemasan Kopikulo Mix Espresso 250 g, label oranye tua" class="stage-img z-20" style="left:50%;top:50%;width:122%" width="1536" height="1024" fetchpriority="high">
+        </div>
+      </div>
+
+      <!-- Cerita singkat -->
+      <div id="cerita" class="mt-12 scroll-mt-24 border-t border-navy/20 pt-8 md:mt-16">
+        <div class="grid gap-6 md:grid-cols-[1.1fr_2fr] md:gap-12">
+          <h2 class="font-serif text-3xl font-bold text-navy">Kopi UMKM dari Kulon Progo.</h2>
+          <div>
+            <p class="max-w-xl text-lg leading-relaxed text-navy/85">Kami bikin kopi yang enak buat teman ngopi, ngerjain tugas, sampai begadang bareng. Simpel dan jujur.</p>
+            <dl class="mt-6 grid grid-cols-3 gap-2.5 sm:gap-4">
+              <div class="rounded-2xl border border-navy/10 bg-white/60 px-2 py-3 text-center sm:px-5 sm:py-4 sm:text-left"><dt class="text-xs font-medium text-navy/80 sm:text-sm">Biji</dt><dd class="mt-1 font-serif text-base font-bold leading-snug sm:text-xl">100% Arabica</dd></div>
+              <div class="rounded-2xl border border-navy/10 bg-white/60 px-2 py-3 text-center sm:px-5 sm:py-4 sm:text-left"><dt class="text-xs font-medium text-navy/80 sm:text-sm">Varian</dt><dd class="mt-1 font-serif text-base font-bold leading-snug sm:text-xl">5 rasa</dd></div>
+              <div class="rounded-2xl border border-navy/10 bg-white/60 px-2 py-3 text-center sm:px-5 sm:py-4 sm:text-left"><dt class="text-xs font-medium text-navy/80 sm:text-sm">Tiap kemasan</dt><dd class="mt-1 font-serif text-base font-bold leading-snug sm:text-xl">25 drip bag</dd></div>
+            </dl>
+            <p class="mt-4 text-sm text-navy/80">Cerita pendiri dan proses sangrai: [DATA ASLI]</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VARIAN -->
+    <section id="kopi" class="scroll-mt-16 py-14 md:py-20" aria-labelledby="kopi-title">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div class="max-w-xl">
+            <p class="text-sm font-bold uppercase tracking-[0.18em] text-orange-deep">Kopi 250 g · isi 25 drip bag</p>
+            <h2 id="kopi-title" class="mt-2 font-serif text-4xl font-bold sm:text-5xl">Pilih rasamu.</h2>
+            <p class="mt-3 text-lg text-navy/85">Lima varian, semuanya 100% Arabica. Tiap kemasan berisi 25 drip bag. Tekan Tambah, atur jumlah.</p>
+          </div>
+          <div class="flex shrink-0 items-center gap-3" role="group" aria-label="Geser pilihan varian">
+            <p id="sl-status" class="mr-1 text-sm font-medium text-navy/80" aria-live="polite"></p>
+            <button type="button" id="sl-prev" aria-label="Varian sebelumnya" class="grid h-12 w-12 place-items-center rounded-full border-2 border-navy text-navy enabled:hover:bg-navy enabled:hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
+            </button>
+            <button type="button" id="sl-next" aria-label="Varian berikutnya" class="grid h-12 w-12 place-items-center rounded-full border-2 border-navy text-navy enabled:hover:bg-navy enabled:hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="slider mt-8 md:mt-12" role="region" aria-roledescription="carousel" aria-label="Pilihan varian kopi">
+          <div id="grid-kopi" class="slider-track"></div>
+        </div>
+        <noscript><p class="mt-8 rounded-xl bg-white p-4">Halaman ini butuh JavaScript untuk memilih varian. Atau langsung chat kami di <a class="font-bold underline" href="https://wa.me/6285643970392">WhatsApp</a>.</p></noscript>
+      </div>
+    </section>
+
+    <!-- DRIP BAG -->
+    <section id="drip" class="scroll-mt-16 py-14 md:py-20" aria-labelledby="drip-title">
+      <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-14">
+        <div class="order-2 lg:order-1">
+          <p class="text-sm font-bold uppercase tracking-[0.18em] text-orange-deep">Drip bag</p>
+          <h2 id="drip-title" class="mt-2 font-serif text-4xl font-bold sm:text-5xl">Satu kemasan, 25 drip bag.</h2>
+          <p class="mt-3 text-lg text-navy/85">Setiap kemasan 250 g berisi 25 drip bag. Tinggal seduh, di mana saja.</p>
+          <p class="mt-4 text-[15px] text-navy/85">Ada di lima rasa: Mix, Grape, Classic, Berry, Durian.</p>
+
+          <a href="#kopi" class="mt-6 inline-flex h-12 items-center rounded-full bg-orange-deep px-7 text-base font-bold text-white hover:bg-[#9d2b0b]">Pilih rasa dan jumlah</a>
+
+          <div class="mt-10 flex items-center gap-5 border-t border-navy/20 pt-8">
+            <img src="assets/mug-drip.png" alt="Mug krem berlogo Kopikulo dengan drip bag tergantung di bibir mug" width="400" height="520" class="blend h-auto w-28 shrink-0 sm:w-36" loading="lazy">
+            <div>
+              <h3 class="font-serif text-2xl font-bold">Seduhnya gampang.</h3>
+              <ol class="mt-3 list-decimal space-y-1.5 pl-5 text-[15px] text-navy/90 marker:font-bold marker:text-orange-deep">
+                <li>Sobek sachet, keluarkan drip bag-nya.</li>
+                <li>Gantung di bibir cangkir.</li>
+                <li>Tuang air panas pelan-pelan.</li>
+                <li>Angkat drip bag. Nikmati.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="order-1 lg:order-2">
+          <img src="assets/drip-bag-mixed.png" alt="Lima sachet Kopikulo drip bag, 10 g: Mix, Grape, Classic, Berry, dan Durian Espresso" width="1536" height="1024" class="blend h-auto w-full" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONI -->
+    <section id="testimoni" class="scroll-mt-16 py-14 md:py-20" aria-labelledby="testi-title">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <h2 id="testi-title" class="font-serif text-4xl font-bold sm:text-5xl">Kata mereka.</h2>
+        <p class="mt-3 text-lg text-navy/85">Testimoni asli pelanggan akan tampil di sini.</p>
+        <ul class="mt-10 grid gap-5 md:grid-cols-3">
+          <!-- Ganti isi tiap kartu dengan testimoni asli. Bintang: ganti fill="none" jadi fill="#E3B04B" sesuai rating asli. -->
+          <li class="on-navy rounded-3xl bg-navy p-6 text-white">
+            <div class="flex gap-1" aria-label="Rating: [DATA ASLI]" role="img">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+            </div>
+            <blockquote class="mt-4 text-lg leading-relaxed">[DATA ASLI] Isi testimoni pelanggan.</blockquote>
+            <p class="mt-5 text-sm font-semibold text-gold">[DATA ASLI] Nama, kampus/kota</p>
+          </li>
+          <li class="on-navy rounded-3xl bg-navy p-6 text-white">
+            <div class="flex gap-1" aria-label="Rating: [DATA ASLI]" role="img">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+            </div>
+            <blockquote class="mt-4 text-lg leading-relaxed">[DATA ASLI] Isi testimoni pelanggan.</blockquote>
+            <p class="mt-5 text-sm font-semibold text-gold">[DATA ASLI] Nama, kampus/kota</p>
+          </li>
+          <li class="on-navy rounded-3xl bg-navy p-6 text-white">
+            <div class="flex gap-1" aria-label="Rating: [DATA ASLI]" role="img">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="#E3B04B" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
+            </div>
+            <blockquote class="mt-4 text-lg leading-relaxed">[DATA ASLI] Isi testimoni pelanggan.</blockquote>
+            <p class="mt-5 text-sm font-semibold text-gold">[DATA ASLI] Nama, kampus/kota</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CARA PESAN -->
+    <section id="cara-pesan" class="scroll-mt-16 py-14 md:py-20" aria-labelledby="cara-title">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <h2 id="cara-title" class="font-serif text-4xl font-bold sm:text-5xl">Cara pesan.</h2>
+        <p class="mt-3 text-lg text-navy/85">Empat langkah, nggak ribet.</p>
+        <ol class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <li class="on-navy rounded-3xl bg-navy p-6 text-white">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-orange text-xl font-bold text-white" aria-hidden="true">1</span>
+            <h3 class="mt-4 font-serif text-xl font-bold">Pilih varian</h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-white/90">Tekan Tambah pada rasa favoritmu, lalu atur jumlahnya.</p>
+          </li>
+          <li class="on-navy rounded-3xl bg-navy p-6 text-white">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-orange text-xl font-bold text-white" aria-hidden="true">2</span>
+            <h3 class="mt-4 font-serif text-xl font-bold">Cek pesanan</h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-white/90">Buka Lihat pesanan. Isi nama, alamat, dan catatan.</p>
+          </li>
+          <li class="on-navy rounded-3xl bg-navy p-6 text-white">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-orange text-xl font-bold text-white" aria-hidden="true">3</span>
+            <h3 class="mt-4 font-serif text-xl font-bold">Kirim ke WhatsApp</h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-white/90">Tekan Pesan via WhatsApp. Pesan sudah tersusun otomatis.</p>
+          </li>
+          <li class="on-navy rounded-3xl bg-navy p-6 text-white">
+            <span class="grid h-12 w-12 place-items-center rounded-full bg-orange text-xl font-bold text-white" aria-hidden="true">4</span>
+            <h3 class="mt-4 font-serif text-xl font-bold">Tunggu kabar</h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-white/90">Kami balas lewat WhatsApp untuk konfirmasi pesananmu.</p>
+          </li>
+        </ol>
+        <p class="mt-6 text-[15px] text-navy/85">Harga, ongkir, metode bayar, estimasi kirim, jam balas: [DATA ASLI]</p>
+        <a href="#kopi" class="mt-6 inline-flex h-12 items-center rounded-full bg-orange-deep px-7 text-base font-bold text-white hover:bg-[#9d2b0b]">Mulai pilih kopi</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-navy pb-28 pt-14 text-white md:pb-14">
+    <div class="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <img src="assets/logo-kopikulo.png" alt="" width="40" height="40" class="h-10 w-10">
+          <span class="text-xl font-bold tracking-wider">KOPIKULO</span>
+        </div>
+        <p class="mt-4 font-serif text-2xl font-semibold">Good coffee, better days.</p>
+        <p class="mt-2 max-w-xs text-[15px] text-white/85">Kopi UMKM dari Kulon Progo.</p>
+      </div>
+      <nav aria-label="Menu footer">
+        <h2 class="text-sm font-bold uppercase tracking-[0.18em] text-gold">Jelajah</h2>
+        <ul class="mt-4 space-y-2 text-[15px]">
+          <li><a class="hover:text-gold" href="#kopi">Kopi</a></li>
+          <li><a class="hover:text-gold" href="#drip">Drip bag</a></li>
+          <li><a class="hover:text-gold" href="#cerita">Cerita</a></li>
+          <li><a class="hover:text-gold" href="#cara-pesan">Cara pesan</a></li>
+        </ul>
+      </nav>
+      <div>
+        <h2 class="text-sm font-bold uppercase tracking-[0.18em] text-gold">Hubungi kami</h2>
+        <ul class="mt-4 space-y-2 text-[15px]">
+          <li>WhatsApp: <a class="font-semibold underline hover:text-gold" href="https://wa.me/6285643970392">0856-4397-0392</a></li>
+          <li>Alamat: [DATA ASLI]</li>
+          <li>Instagram: [DATA ASLI]</li>
+          <li>Jam layanan: [DATA ASLI]</li>
+        </ul>
+      </div>
+    </div>
+    <p class="mx-auto mt-12 max-w-6xl border-t border-white/20 px-4 pt-6 text-sm text-white/80 sm:px-6">© 2026 Kopikulo. Kulon Progo, Yogyakarta.</p>
+  </footer>
+
+  <!-- BAR LIHAT PESANAN (HP) -->
+  <div class="fixed inset-x-0 bottom-0 z-40 bg-navy px-4 pt-3 shadow-[0_-4px_20px_rgba(30,43,88,0.25)] md:hidden" style="padding-bottom:max(0.75rem, env(safe-area-inset-bottom))">
+    <button type="button" data-open-cart class="bar-btn flex h-12 w-full items-center justify-between rounded-full bg-orange-deep px-6 text-base font-bold text-white">
+      <span>Lihat pesanan</span>
+      <span data-count-text aria-live="polite" class="rounded-full bg-white/20 px-3 py-0.5 text-sm">0 item</span>
+    </button>
+  </div>
+
+  <!-- DIALOG PESANAN -->
+  <dialog id="cart" aria-labelledby="cart-title" class="fixed inset-x-0 bottom-0 top-auto m-0 max-h-[92vh] w-full max-w-none overflow-y-auto rounded-t-3xl bg-cream p-0 text-navy backdrop:bg-navy/60 md:inset-auto md:left-1/2 md:top-1/2 md:max-w-lg md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-3xl">
+    <form id="order-form" novalidate class="p-5 sm:p-7">
+      <div class="flex items-start justify-between gap-4">
+        <h2 id="cart-title" tabindex="-1" class="font-serif text-3xl font-bold">Pesanan kamu</h2>
+        <button type="button" id="cart-close" class="grid h-11 w-11 place-items-center rounded-full border-2 border-navy hover:bg-navy hover:text-white" aria-label="Tutup daftar pesanan">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div id="cart-empty" class="mt-6 rounded-2xl bg-white p-5 text-center">
+        <p class="font-semibold">Belum ada pesanan.</p>
+        <p class="mt-1 text-[15px] text-navy/85">Pilih kopi dulu ya.</p>
+        <a href="#kopi" id="cart-browse" class="mt-4 inline-flex h-11 items-center rounded-full bg-navy px-6 font-bold text-white">Lihat kopi</a>
+      </div>
+      <ul id="cart-list" class="mt-6 divide-y divide-navy/15"></ul>
+
+      <div id="cart-fields" class="mt-6 space-y-4">
+        <div>
+          <label for="f-nama" class="block text-sm font-bold">Nama</label>
+          <input id="f-nama" name="nama" type="text" autocomplete="name" required class="mt-1.5 h-12 w-full rounded-xl border-2 border-navy/40 bg-white px-4 text-base focus:border-navy" placeholder="Nama kamu">
+          <p class="mt-1 hidden text-sm font-semibold text-orange-deep" data-err="nama">Isi nama dulu ya.</p>
+        </div>
+        <div>
+          <label for="f-alamat" class="block text-sm font-bold">Alamat pengiriman</label>
+          <textarea id="f-alamat" name="alamat" rows="3" autocomplete="street-address" required class="mt-1.5 w-full rounded-xl border-2 border-navy/40 bg-white px-4 py-3 text-base focus:border-navy" placeholder="Jalan, nomor, kelurahan, kota"></textarea>
+          <p class="mt-1 hidden text-sm font-semibold text-orange-deep" data-err="alamat">Isi alamat dulu ya.</p>
+        </div>
+        <div>
+          <label for="f-catatan" class="block text-sm font-bold">Catatan <span class="font-normal text-navy/80">(opsional)</span></label>
+          <textarea id="f-catatan" name="catatan" rows="2" class="mt-1.5 w-full rounded-xl border-2 border-navy/40 bg-white px-4 py-3 text-base focus:border-navy" placeholder="Misal: giling halus, kirim sore"></textarea>
+        </div>
+      </div>
+
+      <p id="cart-msg" role="alert" class="mt-4 hidden text-sm font-semibold text-orange-deep"></p>
+      <button type="submit" id="wa-submit" class="mt-6 inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-orange-deep text-lg font-bold text-white hover:bg-[#9d2b0b]">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-5.2A8.5 8.5 0 1 1 21 11.5z"/></svg>
+        Pesan via WhatsApp
+      </button>
+      <p class="mt-3 text-center text-sm text-navy/80">Kamu akan diarahkan ke WhatsApp dengan pesan yang sudah terisi.</p>
+    </form>
+  </dialog>
+
+  <script>
+    (function () {
+      var h = document.getElementById('site-header');
+      function onScroll() { h.classList.toggle('is-scrolled', window.scrollY > 8); }
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+  </script>
+  <script>
+    (function () {
+      var WA_NUMBER = '6285643970392';
+
+      var PRODUCTS = [
+        { id: 'classic', name: 'Classic Espresso', tags: 'Rich · Smooth · Balanced', color: '#1E2B58', img: 'assets/kopi-classic.png',
+          desc: 'Racikan klasik biji kopi pilihan. Espresso yang kaya dan autentik.',
+          alt: 'Kemasan Kopikulo Classic Espresso 250 g, label navy', wa: 'Classic Espresso 250 g' },
+        { id: 'mix', name: 'Mix Espresso', tags: 'Rich · Smooth · Balanced', color: '#A53A18', img: 'assets/kopi-mix.png',
+          desc: 'Campuran biji kopi pilihan. Aroma kaya, rasa halus, akhirnya seimbang.',
+          alt: 'Kemasan Kopikulo Mix Espresso 250 g, label oranye tua', wa: 'Mix Espresso 250 g' },
+        { id: 'berry', name: 'Berry Espresso', tags: 'Fruity · Sweet · Vibrant', color: '#972347', img: 'assets/kopi-berry.png',
+          desc: 'Ada sentuhan aneka berry. Manis, segar, tetap halus.',
+          alt: 'Kemasan Kopikulo Berry Espresso 250 g, label merah anggur', wa: 'Berry Espresso 250 g' },
+        { id: 'grape', name: 'Grape Espresso', tags: 'Fruity · Smooth · Elegant', color: '#462366', img: 'assets/kopi-grape.png',
+          desc: 'Ada nuansa anggur alami. Halus dan wangi.',
+          alt: 'Kemasan Kopikulo Grape Espresso 250 g, label ungu', wa: 'Grape Espresso 250 g' },
+        { id: 'durian', name: 'Durian Espresso', tags: 'Creamy · Rich · Unique', color: '#444D24', img: 'assets/kopi-durian.png',
+          desc: 'Aroma durian alami. Body creamy, rasanya susah dilupakan.',
+          alt: 'Kemasan Kopikulo Durian Espresso 250 g, label hijau', wa: 'Durian Espresso 250 g' }
+      ];
+      var ALL = PRODUCTS;
+      var qty = {};
+      ALL.forEach(function (p) { qty[p.id] = 0; });
+
+      var $ = function (s, r) { return (r || document).querySelector(s); };
+      var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+      var ICON_MINUS = '<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>';
+      var ICON_PLUS = '<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+
+      // Stepper: tinggi 48 px (border 2 + tombol 44), kolom 44 | isi | 44, ikon SVG di tengah persis.
+      function stepper(p, qtyAttr, qtyVal, extra) {
+        return '<div ' + extra + ' class="grid h-12 w-full grid-cols-[2.75rem_1fr_2.75rem] items-center rounded-full border-2 border-navy bg-white">' +
+          '<button type="button" data-act="dec" data-id="' + p.id + '" aria-label="Kurangi ' + p.name + '" class="grid h-11 w-11 place-items-center rounded-full hover:bg-navy hover:text-white">' + ICON_MINUS + '</button>' +
+          '<span ' + qtyAttr + ' class="text-center text-lg font-bold leading-none tabular-nums">' + qtyVal + '</span>' +
+          '<button type="button" data-act="inc" data-id="' + p.id + '" aria-label="Tambah ' + p.name + '" class="grid h-11 w-11 place-items-center rounded-full hover:bg-navy hover:text-white">' + ICON_PLUS + '</button>' +
+          '</div>';
+      }
+
+      function ctrl(p) {
+        return '<div data-ctrl="' + p.id + '">' +
+          '<button type="button" data-act="add" data-id="' + p.id + '" class="inline-flex h-12 w-full items-center justify-center rounded-full bg-navy px-6 text-[15px] font-bold text-white hover:bg-[#162043]">Tambah' +
+          '<span class="sr-only"> ' + p.name + '</span></button>' +
+          stepper(p, 'data-qty aria-live="polite"', '0', 'data-stepper hidden') +
+          '</div>';
+      }
+
+      function card(p, i) {
+        return '<article class="slide flex flex-col">' +
+          '<div class="pack-frame"><img class="pack-img" src="' + p.img + '" alt="' + p.alt + '" loading="' + (i < 2 ? 'eager' : 'lazy') + '"></div>' +
+          '<div class="-mt-2 flex flex-1 flex-col">' +
+          '<span class="inline-flex w-fit rounded-full px-3 py-1 text-xs font-bold text-white" style="background:' + p.color + '">250 g · 25 drip bag</span>' +
+          '<h3 class="mt-2 font-serif text-xl font-bold leading-tight sm:text-2xl">' + p.name + '</h3>' +
+          '<p class="mt-1 text-xs font-bold uppercase tracking-wider text-navy/80">' + p.tags + '</p>' +
+          '<p class="mt-2 flex-1 text-[15px] leading-relaxed text-navy/90">' + p.desc + '</p>' +
+          '<p class="mt-3 text-[15px]"><span class="font-bold">[DATA ASLI]</span> <span class="text-navy/80">/ kemasan</span></p>' +
+          '<div class="mt-3">' + ctrl(p) + '</div></div></article>';
+      }
+
+      $('#grid-kopi').innerHTML = PRODUCTS.map(card).join('');
+
+      // Slider: tombol dan geser jari maju 1 item per langkah
+      (function () {
+        var track = $('#grid-kopi'), prev = $('#sl-prev'), next = $('#sl-next'), stat = $('#sl-status');
+        var slides = $$('.slide', track);
+        function step() { return slides[1].offsetLeft - slides[0].offsetLeft; }
+        function perView() { return parseInt(getComputedStyle(track.parentNode).getPropertyValue('--per'), 10) || 1; }
+        function update() {
+          var i = Math.round(track.scrollLeft / step());
+          var last = Math.min(i + perView(), slides.length);
+          prev.disabled = track.scrollLeft <= 2;
+          next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+          stat.textContent = (i + 1) + '–' + last + ' dari ' + slides.length;
+        }
+        prev.addEventListener('click', function () { track.scrollBy({ left: -step() }); });
+        next.addEventListener('click', function () { track.scrollBy({ left: step() }); });
+        track.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+      })();
+
+      var cart = $('#cart'), list = $('#cart-list'), empty = $('#cart-empty'), fields = $('#cart-fields');
+      var submitBtn = $('#wa-submit'), msg = $('#cart-msg');
+
+      var prevN = 0;
+      function total() { return ALL.reduce(function (s, p) { return s + qty[p.id]; }, 0); }
+
+      function syncCtrls() {
+        ALL.forEach(function (p) {
+          var wrap = $('[data-ctrl="' + p.id + '"]');
+          var add = $('[data-act="add"]', wrap), st = $('[data-stepper]', wrap);
+          add.hidden = qty[p.id] > 0;
+          st.hidden = qty[p.id] === 0;
+          $('[data-qty]', wrap).textContent = qty[p.id];
+          var row = $('[data-row="' + p.id + '"]', list);
+          if (row) $('[data-rowqty]', row).textContent = qty[p.id];
+        });
+        var n = total();
+        $$('[data-open-cart]').forEach(function (b) {
+          b.classList.toggle('has-items', n > 0);
+          if (n > prevN) { b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
+        });
+        prevN = n;
+        $$('[data-count-text]').forEach(function (e) { e.textContent = n + ' item'; });
+        $$('[data-count-badge]').forEach(function (e) { e.textContent = n; e.hidden = n === 0; });
+      }
+
+      function renderCart() {
+        var items = ALL.filter(function (p) { return qty[p.id] > 0; });
+        list.innerHTML = items.map(function (p) {
+          return '<li data-row="' + p.id + '" class="flex items-center justify-between gap-3 py-3">' +
+            '<div><p class="font-bold">' + p.name + '</p><p class="text-sm text-navy/80">' + '250 g · 25 drip bag' + '</p></div>' +
+            '<div class="w-36 shrink-0">' + stepper(p, 'data-rowqty', qty[p.id], '') + '</div></li>';
+        }).join('');
+        var has = items.length > 0;
+        empty.hidden = has;
+        list.hidden = !has;
+        fields.hidden = !has;
+        submitBtn.hidden = !has;
+        submitBtn.nextElementSibling.hidden = !has;
+      }
+
+      function openCart() {
+        renderCart();
+        msg.classList.add('hidden');
+        if (!cart.open) cart.showModal();
+        document.documentElement.classList.add('overflow-hidden');
+      }
+      function closeCart() { if (cart.open) cart.close(); }
+      cart.addEventListener('close', function () { document.documentElement.classList.remove('overflow-hidden'); });
+      cart.addEventListener('click', function (e) { if (e.target === cart) closeCart(); });
+      $('#cart-close').addEventListener('click', closeCart);
+      $('#cart-browse').addEventListener('click', closeCart);
+      $$('[data-open-cart]').forEach(function (b) { b.addEventListener('click', openCart); });
+
+      document.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-act]');
+        if (!b) return;
+        var id = b.getAttribute('data-id'), act = b.getAttribute('data-act');
+        var inCart = !!b.closest('#cart-list');
+        if (act === 'add' || act === 'inc') qty[id] = Math.min(99, qty[id] + 1);
+        if (act === 'dec') qty[id] = Math.max(0, qty[id] - 1);
+        syncCtrls();
+        if (inCart && qty[id] === 0) {
+          renderCart();
+          $('#cart-title').focus();
+        }
+        if (!inCart) {
+          var wrap = $('[data-ctrl="' + id + '"]');
+          var target = qty[id] > 0 ? $('[data-act="' + (act === 'add' ? 'inc' : act) + '"]', $('[data-stepper]', wrap)) : $('[data-act="add"]', wrap);
+          if (target) target.focus();
+        }
+      });
+
+      function showErr(name, on) {
+        var el = $('[data-err="' + name + '"]');
+        if (el) el.classList.toggle('hidden', !on);
+      }
+
+      $('#order-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var items = ALL.filter(function (p) { return qty[p.id] > 0; });
+        if (!items.length) { msg.textContent = 'Pilih minimal satu item dulu ya.'; msg.classList.remove('hidden'); return; }
+        var nama = $('#f-nama').value.trim(), alamat = $('#f-alamat').value.trim(), catatan = $('#f-catatan').value.trim();
+        showErr('nama', !nama); showErr('alamat', !alamat);
+        if (!nama) { $('#f-nama').focus(); return; }
+        if (!alamat) { $('#f-alamat').focus(); return; }
+        msg.classList.add('hidden');
+
+        var lines = items.map(function (p, i) { return (i + 1) + '. ' + p.wa + ' (isi 25 drip bag) × ' + qty[p.id]; });
+        var text = 'Halo Kopikulo! 👋\nSaya mau pesan:\n\n' + lines.join('\n') +
+          '\n\n*Nama:* ' + nama + '\n*Alamat:* ' + alamat + '\n*Catatan:* ' + (catatan || '-') + '\n\nTerima kasih!';
+        var url = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text);
+        var w = window.open(url, '_blank', 'noopener');
+        if (!w) window.location.href = url;
+      });
+      ['f-nama', 'f-alamat'].forEach(function (id) {
+        $('#' + id).addEventListener('input', function (e) { if (e.target.value.trim()) showErr(id.slice(2), false); });
+      });
+
+      syncCtrls();
+    })();
+  </script>
+</body>
+</html>
