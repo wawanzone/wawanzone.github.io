@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kopikulo – Good coffee, better days | Kopi dari Kulon Progo</title>
+<meta name="description" content="Kopikulo, kopi 100% Arabica dari Kulon Progo. Pilih varian, atur jumlah, pesan lewat WhatsApp.">
+<link rel="icon" href="assets/logo-kopikulo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { krem:'#F3EBE1', navy:'#1E2B58', oranye:'#FF5C39', emas:'#E3B04B', berry:'#972347', grape:'#462366', durian:'#444D24' },
+  fontFamily: { serif:['Fraunces','Georgia','serif'], sans:['Inter','system-ui','sans-serif'] }
+}}}
+</script>
+<style>
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+:focus-visible{outline:3px solid #FF5C39;outline-offset:2px}
+dialog::backdrop{background:rgba(30,43,88,.6)}
+dialog[open]{animation:pop .2s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes nudge{from{box-shadow:0 0 0 0 rgba(255,92,57,.8)}to{box-shadow:0 0 0 14px rgba(255,92,57,0)}}
+.nudge{animation:nudge .7s ease-out}
+@media (prefers-reduced-motion:reduce){.nudge{animation:none}}
+.snap{scrollbar-width:none}.snap::-webkit-scrollbar{display:none}
+</style>
+</head>
+<body class="bg-krem text-navy font-sans antialiased pb-20 md:pb-0">
+
+<!-- Navbar -->
+<header class="sticky top-0 z-40 bg-krem/95 backdrop-blur border-b border-navy/10">
+  <nav class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between" aria-label="Menu utama">
+    <a href="#top" class="flex items-center gap-2" aria-label="Kopikulo, ke atas">
+      <img src="assets/logo-kopikulo.png" alt="Logo Kopikulo: cangkir kopi beruap" class="h-9 w-9">
+      <span class="font-serif font-bold text-xl">Kopikulo</span>
+    </a>
+    <ul class="hidden md:flex gap-8 font-medium">
+      <li><a class="hover:underline underline-offset-4 decoration-oranye decoration-2" href="#kopi">Kopi</a></li>
+      <li><a class="hover:underline underline-offset-4 decoration-oranye decoration-2" href="#dripbag">Drip bag</a></li>
+      <li><a class="hover:underline underline-offset-4 decoration-oranye decoration-2" href="#cerita">Cerita</a></li>
+      <li><a class="hover:underline underline-offset-4 decoration-oranye decoration-2" href="#cara">Cara pesan</a></li>
+    </ul>
+    <button type="button" id="navBtn" data-open class="inline-flex items-center bg-navy text-white font-semibold rounded-full px-5 py-2 hover:bg-navy/90">Pesan<span id="navBadge" class="hidden ml-2 min-w-6 h-6 px-1.5 items-center justify-center rounded-full bg-white text-navy text-sm font-bold"></span></button>
+  </nav>
+</header>
+
+<main id="top">
+<!-- Hero -->
+<section class="max-w-6xl mx-auto px-5 pt-10 pb-6 md:pt-16 grid md:grid-cols-2 items-center gap-6">
+  <div>
+    <h1 class="font-serif font-bold text-5xl md:text-7xl leading-[1.05]">Good coffee, better days.</h1>
+    <p class="mt-5 text-lg max-w-md">Kopi Arabica dari Kulon Progo. Pilih rasamu, pesan lewat WhatsApp. Gampang.</p>
+    <a href="#kopi" class="mt-7 inline-block bg-oranye text-white text-lg font-bold rounded-full px-8 py-3 hover:brightness-95">Pilih kopimu</a>
+  </div>
+  <div class="relative h-[340px] md:h-[520px]">
+    <img src="assets/kopi-berry.png" alt="Kemasan Kopikulo Berry Espresso 250 g, merah anggur" class="absolute left-[-20%] top-[22%] w-[66%] max-w-none">
+    <img src="assets/kopi-grape.png" alt="Kemasan Kopikulo Grape Espresso 250 g, ungu" class="absolute right-[-20%] top-[22%] w-[66%] max-w-none">
+    <img src="assets/kopi-classic.png" alt="Kemasan Kopikulo Classic Espresso 250 g, navy" class="absolute left-[2%] top-[2%] w-[96%] max-w-none z-10">
+  </div>
+</section>
+
+<!-- Cerita -->
+<section id="cerita" class="max-w-3xl mx-auto px-5 py-16 md:py-24 text-center">
+  <h2 class="font-serif font-bold text-3xl md:text-4xl">Kopi UMKM dari Kulon Progo</h2>
+  <p class="mt-5 text-lg">Kopikulo dibuat di Kulon Progo. Rasanya ramah, pilihannya seru buat dicoba.</p>
+  <ul class="mt-8 grid grid-cols-3 gap-3">
+    <li class="rounded-xl border border-navy/10 bg-navy/5 px-2 py-4 md:py-5"><p class="text-sm">Biji</p><p class="font-serif font-bold text-lg md:text-2xl leading-tight">100% Arabica</p></li>
+    <li class="rounded-xl border border-navy/10 bg-navy/5 px-2 py-4 md:py-5"><p class="text-sm">Varian</p><p class="font-serif font-bold text-lg md:text-2xl leading-tight">5 rasa</p></li>
+    <li class="rounded-xl border border-navy/10 bg-navy/5 px-2 py-4 md:py-5"><p class="text-sm">Tiap kemasan</p><p class="font-serif font-bold text-lg md:text-2xl leading-tight">25 drip bag</p></li>
+  </ul>
+  <p class="mt-6">Cerita kebun, petani, dan proses sangrai: [DATA ASLI]</p>
+</section>
+
+<!-- Varian -->
+<section id="kopi" class="max-w-6xl mx-auto px-5 pb-16 md:pb-24">
+  <div class="flex items-end justify-between gap-4">
+    <div>
+      <h2 class="font-serif font-bold text-3xl md:text-4xl">Pilih rasamu</h2>
+      <p class="mt-2 text-lg">Kopi bubuk 250 g. Satu kemasan berisi 25 drip bag.</p>
+    </div>
+    <div class="flex gap-2 shrink-0">
+      <button type="button" id="prev" class="h-11 w-11 rounded-full border-2 border-navy text-2xl font-bold leading-none disabled:opacity-30" aria-label="Geser ke kiri">‹</button>
+      <button type="button" id="next" class="h-11 w-11 rounded-full border-2 border-navy text-2xl font-bold leading-none disabled:opacity-30" aria-label="Geser ke kanan">›</button>
+    </div>
+  </div>
+  <div id="viewport" class="mt-8 overflow-hidden touch-pan-y" role="region" aria-roledescription="carousel" aria-label="Varian kopi">
+    <ul id="varian" class="flex transition-transform duration-300 motion-reduce:transition-none"></ul>
+  </div>
+</section>
+
+<!-- Drip bag -->
+<section id="dripbag" class="bg-navy text-white">
+  <div class="max-w-6xl mx-auto px-5 py-16 md:py-24 grid md:grid-cols-2 items-center gap-10">
+    <div class="order-2 md:order-1">
+      <h2 class="font-serif font-bold text-3xl md:text-4xl">Drip bag: seduh di mana saja</h2>
+      <p class="mt-4 text-lg max-w-md">Satu kemasan berisi 25 drip bag. Sobek, gantung di cangkir, tuang air panas. Selesai.</p>
+      <ol class="mt-5 space-y-1 text-lg list-decimal list-inside">
+        <li>Sobek kemasan drip bag.</li>
+        <li>Gantung di bibir cangkir.</li>
+        <li>Tuang air panas pelan-pelan.</li>
+      </ol>
+      <p class="mt-5 text-white/90">Ukuran per drip bag: 10 g.</p>
+      <button type="button" data-open class="mt-7 bg-oranye text-white text-lg font-bold rounded-full px-8 py-3 hover:brightness-95">Pesan sekarang</button>
+    </div>
+    <div class="order-1 md:order-2 relative">
+      <img src="assets/drip-bag-mixed.png" alt="Lima sachet drip bag Kopikulo: Mix, Grape, Classic, Berry, dan Durian Espresso" class="w-full" loading="lazy">
+      <img src="assets/mug-drip.png" alt="Mug krem Kopikulo dengan drip bag tergantung di bibir cangkir" class="absolute -bottom-6 right-0 w-1/3 md:w-[34%]" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- Testimoni -->
+<section class="max-w-6xl mx-auto px-5 py-16 md:py-24">
+  <h2 class="font-serif font-bold text-3xl md:text-4xl">Kata mereka</h2>
+  <ul class="snap mt-8 flex md:grid md:grid-cols-3 gap-4 overflow-x-auto snap-x snap-mandatory -mx-5 px-5 md:mx-0 md:px-0">
+    <li class="snap-start shrink-0 w-[82%] md:w-auto bg-navy text-white rounded-2xl p-6 flex flex-col"><p class="text-emas tracking-wider" role="img" aria-label="5 dari 5 bintang">★★★★★</p><p class="mt-3 flex-1">“Aroma kopinya enak banget, rasanya smooth dan nggak terlalu pahit. Cocok buat teman kerja pagi hari!”</p><p class="mt-4 font-semibold">Nadia P.</p><p class="text-sm text-white/80">Classic Espresso</p></li>
+    <li class="snap-start shrink-0 w-[82%] md:w-auto bg-navy text-white rounded-2xl p-6 flex flex-col"><p class="text-emas tracking-wider" role="img" aria-label="5 dari 5 bintang">★★★★★</p><p class="mt-3 flex-1">“Awalnya penasaran sama rasa berry-nya, ternyata menarik! Ada sensasi fruity yang bikin pengalaman ngopi jadi beda.”</p><p class="mt-4 font-semibold">Arif R.</p><p class="text-sm text-white/80">Berry Espresso</p></li>
+    <li class="snap-start shrink-0 w-[82%] md:w-auto bg-navy text-white rounded-2xl p-6 flex flex-col"><p class="text-emas tracking-wider" role="img" aria-label="5 dari 5 bintang">★★★★★</p><p class="mt-3 flex-1">“Suka banget sama aroma anggurnya. Rasanya unik, aromatik, dan cocok buat yang ingin mencoba sesuatu yang berbeda.”</p><p class="mt-4 font-semibold">Dinda A.</p><p class="text-sm text-white/80">Grape Espresso</p></li>
+    <li class="snap-start shrink-0 w-[82%] md:w-auto bg-navy text-white rounded-2xl p-6 flex flex-col"><p class="text-emas tracking-wider" role="img" aria-label="5 dari 5 bintang">★★★★★</p><p class="mt-3 flex-1">“Nggak nyangka perpaduan kopi dan aroma durian bisa semenarik ini. Karakternya khas dan layak dicoba!”</p><p class="mt-4 font-semibold">Bagas W.</p><p class="text-sm text-white/80">Durian Espresso</p></li>
+    <li class="snap-start shrink-0 w-[82%] md:w-auto bg-navy text-white rounded-2xl p-6 flex flex-col"><p class="text-emas tracking-wider" role="img" aria-label="5 dari 5 bintang">★★★★★</p><p class="mt-3 flex-1">“Drip bag-nya praktis banget buat dibawa bepergian. Tinggal seduh pakai air panas, bisa menikmati kopi tanpa perlu alat khusus.”</p><p class="mt-4 font-semibold">Maya S.</p><p class="text-sm text-white/80">Mixed Variant</p></li>
+  </ul>
+</section>
+
+<!-- Cara pesan -->
+<section id="cara" class="max-w-4xl mx-auto px-5 pb-16 md:pb-24">
+  <h2 class="font-serif font-bold text-3xl md:text-4xl text-center">Cara pesan</h2>
+  <ol class="mt-8 grid md:grid-cols-3 gap-8 text-center">
+    <li><span class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-navy text-white font-serif font-bold text-xl">1</span><h3 class="mt-3 font-serif font-bold text-xl">Pilih varian</h3><p class="mt-1">Atur jumlah tiap kopi.</p></li>
+    <li><span class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-navy text-white font-serif font-bold text-xl">2</span><h3 class="mt-3 font-serif font-bold text-xl">Isi data</h3><p class="mt-1">Nama, alamat, dan catatan.</p></li>
+    <li><span class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-navy text-white font-serif font-bold text-xl">3</span><h3 class="mt-3 font-serif font-bold text-xl">Kirim via WhatsApp</h3><p class="mt-1">Pesan sudah tertata. Tinggal kirim.</p></li>
+  </ol>
+</section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-navy text-white">
+  <div class="max-w-6xl mx-auto px-5 py-12 grid md:grid-cols-3 gap-8">
+    <div>
+      <div class="flex items-center gap-2"><img src="assets/logo-kopikulo.png" alt="" class="h-9 w-9 bg-krem rounded-full p-1"><span class="font-serif font-bold text-xl">Kopikulo</span></div>
+      <p class="mt-3">Good coffee, better days.</p>
+    </div>
+    <div>
+      <h2 class="font-serif font-bold text-lg">Hubungi kami</h2>
+      <p class="mt-2">WhatsApp: <a class="underline" href="https://wa.me/6285643000000">085643000000</a></p>
+      <p>Instagram: [DATA ASLI]</p>
+      <p>Alamat: Kulon Progo, [DATA ASLI]</p>
+    </div>
+    <div>
+      <h2 class="font-serif font-bold text-lg">Menu</h2>
+      <ul class="mt-2 space-y-1"><li><a class="underline" href="#kopi">Kopi</a></li><li><a class="underline" href="#dripbag">Drip bag</a></li><li><a class="underline" href="#cerita">Cerita</a></li><li><a class="underline" href="#cara">Cara pesan</a></li></ul>
+    </div>
+  </div>
+  <p class="border-t border-white/20 text-center text-sm py-4">© Kopikulo. Kulon Progo.</p>
+</footer>
+
+<!-- Bar mobile -->
+<div class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-navy text-white px-5 py-3 flex items-center justify-between" style="padding-bottom:max(.75rem,env(safe-area-inset-bottom))">
+  <p id="barInfo" class="font-medium">Belum ada pesanan</p>
+  <button type="button" data-open class="bg-oranye text-white text-lg font-bold rounded-full px-5 py-1.5">Lihat pesanan</button>
+</div>
+
+<!-- Popup pesanan -->
+<dialog id="dlg" class="w-[calc(100%-2rem)] max-w-md rounded-2xl p-0 bg-krem text-navy" aria-labelledby="dlgTitle">
+  <form id="frm" class="p-6">
+    <div class="flex items-start justify-between">
+      <h2 id="dlgTitle" class="font-serif font-bold text-2xl">Pesananmu</h2>
+      <button type="button" id="closeBtn" class="text-2xl leading-none px-2" aria-label="Tutup">×</button>
+    </div>
+    <ul id="items" class="mt-4 divide-y divide-navy/15"></ul>
+    <p id="total" class="mt-3 font-semibold text-right"></p>
+    <label class="block mt-4 font-medium" for="nama">Nama</label>
+    <input id="nama" required autocomplete="name" class="mt-1 w-full rounded-lg border border-navy/40 bg-white px-3 py-2">
+    <label class="block mt-3 font-medium" for="alamat">Alamat</label>
+    <textarea id="alamat" required rows="2" autocomplete="street-address" class="mt-1 w-full rounded-lg border border-navy/40 bg-white px-3 py-2"></textarea>
+    <label class="block mt-3 font-medium" for="catatan">Catatan (boleh kosong)</label>
+    <textarea id="catatan" rows="2" class="mt-1 w-full rounded-lg border border-navy/40 bg-white px-3 py-2"></textarea>
+    <p id="err" class="mt-3 text-sm font-semibold text-berry" role="alert"></p>
+    <button type="submit" class="mt-3 w-full bg-oranye text-white text-lg font-bold rounded-full py-3 hover:brightness-95">Pesan via WhatsApp</button>
+  </form>
+</dialog>
+
+<script>
+const PHONE = '6285643000000', PRICE = 85000;
+const V = [
+  {id:'classic', n:'Classic Espresso', t:'Rich, smooth, balanced', img:'kopi-classic.png', c:'#1E2B58', alt:'Kemasan Kopikulo Classic Espresso 250 g, navy'},
+  {id:'mix', n:'Mix Espresso', t:'Rich, smooth, balanced', img:'kopi-mix.png', c:'#B8461F', alt:'Kemasan Kopikulo Mix Espresso 250 g, oranye bata'},
+  {id:'berry', n:'Berry Espresso', t:'Fruity, sweet, vibrant', img:'kopi-berry.png', c:'#972347', alt:'Kemasan Kopikulo Berry Espresso 250 g, merah anggur'},
+  {id:'grape', n:'Grape Espresso', t:'Fruity, smooth, elegant', img:'kopi-grape.png', c:'#462366', alt:'Kemasan Kopikulo Grape Espresso 250 g, ungu'},
+  {id:'durian', n:'Durian Espresso', t:'Creamy, rich, unique', img:'kopi-durian.png', c:'#444D24', alt:'Kemasan Kopikulo Durian Espresso 250 g, hijau zaitun'}
+];
+const cart = {}; V.forEach(v => cart[v.id] = 0);
+const rp = n => 'Rp ' + n.toLocaleString('id-ID');
+const $ = s => document.querySelector(s);
+const step = v => `<div class="inline-flex items-center rounded-full border-2 border-navy">
+  <button type="button" data-id="${v.id}" data-d="-1" class="h-9 w-8 sm:h-10 sm:w-10 text-xl font-bold" aria-label="Kurangi ${v.n}">−</button>
+  <span class="w-5 sm:w-8 text-center font-semibold" aria-live="polite">${cart[v.id]}</span>
+  <button type="button" data-id="${v.id}" data-d="1" class="h-9 w-8 sm:h-10 sm:w-10 text-xl font-bold" aria-label="Tambah ${v.n}">+</button></div>`;
+
+function render(){
+  $('#varian').innerHTML = V.map(v => `<li class="shrink-0 basis-1/3 flex flex-col items-center text-center px-1">
+    <div class="w-full h-40 sm:h-56 md:h-80 flex items-center justify-center"><img src="assets/${v.img}" alt="${v.alt}" class="max-w-none shrink-0 w-[220%] sm:w-[160%] md:w-[130%]"></div>
+    <h3 class="font-serif font-bold text-base sm:text-xl leading-tight"><span class="inline-block h-3 w-3 rounded-full mr-1.5" style="background:${v.c}" aria-hidden="true"></span>${v.n}</h3>
+    <p class="text-xs sm:text-sm mt-1">${v.t}</p>
+    <p class="mt-1 text-sm sm:text-base font-semibold">${rp(PRICE)}<span class="block text-xs font-normal">/ 250 g</span></p>
+    <div class="mt-3">${step(v)}</div></li>`).join('');
+  const sel = V.filter(v => cart[v.id] > 0), qty = sel.reduce((a,v) => a + cart[v.id], 0);
+  $('#barInfo').textContent = qty ? `${qty} kemasan · ${rp(qty*PRICE)}` : 'Belum ada pesanan';
+  $('#items').innerHTML = sel.length ? sel.map(v => `<li class="flex items-center justify-between py-2 gap-2"><span>${v.n}<br><span class="text-sm">${rp(PRICE)}</span></span>${step(v)}</li>`).join('')
+    : '<li class="py-3">Belum ada kopi. Tutup popup ini, lalu pilih varian dulu.</li>';
+  $('#total').textContent = qty ? `Total: ${rp(qty*PRICE)}` : '';
+  const nb = $('#navBtn'), bd = $('#navBadge');
+  nb.classList.toggle('ring-4', qty > 0); nb.classList.toggle('ring-oranye', qty > 0);
+  bd.classList.toggle('hidden', !qty); bd.classList.toggle('inline-flex', qty > 0); bd.textContent = qty;
+  nb.setAttribute('aria-label', qty ? `Pesan, ${qty} kemasan di pesanan` : 'Pesan');
+  if (qty > prevQty){ nb.classList.remove('nudge'); void nb.offsetWidth; nb.classList.add('nudge'); }
+  prevQty = qty;
+  slide();
+}
+let prevQty = 0, idx = 0;
+const SHOW = 3, MAX = V.length - SHOW;
+function slide(){
+  $('#varian').style.transform = `translateX(-${idx * 100 / SHOW}%)`;
+  $('#prev').disabled = idx === 0; $('#next').disabled = idx === MAX;
+  [...$('#varian').children].forEach((li, i) => li.inert = i < idx || i >= idx + SHOW);
+}
+const go = d => { idx = Math.max(0, Math.min(MAX, idx + d)); slide(); };
+$('#prev').onclick = () => go(-1);
+$('#next').onclick = () => go(1);
+let sx = null;
+$('#viewport').addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, {passive:true});
+$('#viewport').addEventListener('touchend', e => {
+  if (sx === null) return;
+  const dx = e.changedTouches[0].clientX - sx; sx = null;
+  if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-d]');
+  if (b){ const id = b.dataset.id; cart[id] = Math.max(0, Math.min(99, cart[id] + +b.dataset.d)); render(); return; }
+  if (e.target.closest('[data-open]')){ $('#err').textContent=''; $('#dlg').showModal(); }
+});
+$('#closeBtn').onclick = () => $('#dlg').close();
+$('#dlg').addEventListener('click', e => { if (e.target === $('#dlg')) $('#dlg').close(); });
+$('#frm').addEventListener('submit', e => {
+  e.preventDefault();
+  const sel = V.filter(v => cart[v.id] > 0);
+  if (!sel.length){ $('#err').textContent = 'Pilih minimal satu kopi dulu ya.'; return; }
+  const total = sel.reduce((a,v) => a + cart[v.id]*PRICE, 0), cat = $('#catatan').value.trim();
+  const msg = ['Halo Kopikulo! Aku mau pesan:', '',
+    ...sel.map(v => `• ${v.n} 250 g × ${cart[v.id]}`), '',
+    `Total: ${rp(total)}`, '',
+    `Nama: ${$('#nama').value.trim()}`,
+    `Alamat: ${$('#alamat').value.trim()}`,
+    `Catatan: ${cat || '-'}`, '', 'Makasih!'].join('\n');
+  window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+});
+render();
+</script>
+</body>
+</html>

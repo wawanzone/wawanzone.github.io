@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopikulo - Good Coffee, Better Days</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fraunces & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#F3EBE1',
+                        navy: '#1E2B58',
+                        orange: '#FF5C39',
+                        gold: '#E3B04B',
+                        white: '#FFFFFF',
+                        'berry': '#972347',
+                        'grape': '#462366',
+                        'durian': '#444D24',
+                        'classic': '#1E2B58', 
+                        'mix': '#B35C37', 
+                    },
+                    fontFamily: {
+                        'heading': ['Fraunces', 'serif'],
+                        'body': ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar untuk mobile */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #1E2B58; border-radius: 4px; }
+        .bg-pattern {
+            background-image: radial-gradient(#1E2B58 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.05;
+        }
+        /* Styling untuk Slider Varian */
+        .slider-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            gap: 1.5rem;
+            padding-bottom: 1rem;
+        }
+        .slider-container::-webkit-scrollbar {
+            display: none; /* Sembunyikan scrollbar di Webkit */
+        }
+        .slider-item {
+            flex: 0 0 calc(100% - 2rem); /* Mobile: 1 item + peek */
+            scroll-snap-align: start;
+        }
+        @media (min-width: 768px) {
+            .slider-item {
+                flex: 0 0 calc(33.333% - 1rem); /* Desktop: 3 item */
+            }
+        }
+    </style>
+</head>
+<body class="bg-cream text-navy font-body antialiased selection:bg-orange selection:text-white pb-24 md:pb-0">
+
+    <!-- NAVBAR -->
+    <nav class="sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b border-navy/10 transition-colors duration-300" id="main-navbar">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 md:h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2">
+                    <img src="assets/logo-kopikulo.png" alt="Logo Kopikulo" class="h-8 md:h-10 w-auto">
+                    <span class="font-heading font-bold text-xl md:text-2xl text-navy tracking-tight">Kopikulo</span>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#kopi" class="text-navy font-medium hover:text-orange transition-colors">Kopi</a>
+                    <a href="#drip-bag" class="text-navy font-medium hover:text-orange transition-colors">Drip Bag</a>
+                    <a href="#cerita" class="text-navy font-medium hover:text-orange transition-colors">Cerita</a>
+                    <a href="#cara-pesan" class="text-navy font-medium hover:text-orange transition-colors">Cara Pesan</a>
+                </div>
+
+                <!-- Desktop CTA -->
+                <div class="hidden md:block">
+                    <a href="#varian" id="nav-btn-pesan" class="bg-navy text-white px-5 py-2.5 rounded-full font-semibold hover:bg-navy/90 transition-all shadow-lg shadow-navy/20 flex items-center gap-2">
+                        <span>Pesan</span>
+                        <span id="nav-cart-badge" class="hidden bg-white text-navy text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button (Hanya Logo & Pesan) -->
+                <div class="md:hidden">
+                    <a href="#varian" id="mobile-nav-btn-pesan" class="bg-navy text-white px-4 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-2">
+                        <span>Pesan</span>
+                        <span id="mobile-nav-cart-badge" class="hidden bg-white text-navy text-xs px-1.5 py-0.5 rounded-full font-bold">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION (Diperbaiki: 3 Varian Berjajar) -->
+    <section class="relative overflow-hidden pt-10 pb-16 md:pt-20 md:pb-24">
+        <div class="absolute inset-0 bg-pattern pointer-events-none"></div>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row items-center gap-10 md:gap-16">
+                <!-- Text -->
+                <div class="flex-1 text-center md:text-left">
+                    <span class="inline-block py-1 px-3 rounded-full bg-orange/10 text-orange font-semibold text-sm mb-4">UMKM Kulon Progo</span>
+                    <h1 class="font-heading text-4xl md:text-6xl font-bold leading-tight mb-6 text-navy">
+                        Good coffee, <br> <span class="text-orange italic">better days.</span>
+                    </h1>
+                    <p class="text-navy/80 text-lg mb-8 max-w-lg mx-auto md:mx-0">
+                        Nikmati kesegaran kopi racikan lokal dengan kepraktisan drip bag. Cocok untuk menemani harimu yang sibuk.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <a href="#varian" class="bg-navy text-white text-center px-8 py-3.5 rounded-full font-semibold hover:bg-navy/90 transition-all shadow-xl shadow-navy/20">Pilih Varian</a>
+                        <a href="#cerita" class="bg-white text-navy border border-navy/10 text-center px-8 py-3.5 rounded-full font-semibold hover:bg-white/80 transition-all">Kenali Kami</a>
+                    </div>
+                </div>
+                
+                <!-- Image: 3 Varian Berjajar -->
+                <div class="flex-1 w-full max-w-lg md:max-w-none relative flex items-end justify-center gap-2 md:gap-4">
+                    <div class="absolute -inset-4 bg-orange/20 rounded-[3rem] blur-2xl transform rotate-3"></div>
+                    
+                    <!-- Kiri: Berry -->
+                    <div class="relative w-1/3 transform translate-y-6 md:translate-y-8 transition-transform duration-500 hover:-translate-y-2">
+                        <img src="assets/kopi-berry.png" alt="Kopi Berry" class="w-full h-auto drop-shadow-xl">
+                    </div>
+                    
+                    <!-- Tengah: Classic (Lebih Besar) -->
+                    <div class="relative w-2/5 transform -translate-y-4 md:-translate-y-8 z-10 transition-transform duration-500 hover:-translate-y-10">
+                        <img src="assets/kopi-classic.png" alt="Kopi Classic" class="w-full h-auto drop-shadow-2xl scale-110 md:scale-125">
+                    </div>
+                    
+                    <!-- Kanan: Grape -->
+                    <div class="relative w-1/3 transform translate-y-6 md:translate-y-8 transition-transform duration-500 hover:-translate-y-2">
+                        <img src="assets/kopi-grape.png" alt="Kopi Grape" class="w-full h-auto drop-shadow-xl">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CERITA SECTION (Diperbaiki: Card Tipis & 3 Poin Utama) -->
+    <section id="cerita" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <!-- Image -->
+                <div class="flex-1 w-full relative">
+                    <img src="assets/mug-drip.png" alt="Seduhan Kopi Drip Bag Kopikulo" class="w-full max-w-sm mx-auto md:max-w-full rounded-3xl shadow-2xl">
+                </div>
+                
+                <!-- Content Card -->
+                <div class="flex-1 w-full">
+                    <div class="bg-cream/50 border border-navy/10 rounded-3xl p-6 md:p-10 shadow-sm relative overflow-hidden">
+                        <!-- Aksen dekoratif -->
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-orange/10 rounded-full blur-2xl"></div>
+                        
+                        <h2 class="font-heading text-3xl md:text-4xl font-bold mb-4 text-navy relative z-10">Kopi UMKM dari <br>Kulon Progo</h2>
+                        <p class="text-navy/70 leading-relaxed mb-8 relative z-10">
+                            Kopikulo lahir dari kecintaan pada kopi lokal. Kami memilih biji terbaik dan mengemasnya secara praktis agar kamu bisa menikmati kopi berkualitas kapan saja, tanpa ribet.
+                        </p>
+                        
+                        <!-- 3 Poin Utama -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
+                            <div class="bg-white p-4 rounded-2xl border border-navy/5 shadow-sm text-center">
+                                <div class="text-orange font-bold text-xl mb-1">100%</div>
+                                <div class="text-sm font-semibold text-navy">Arabica</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-2xl border border-navy/5 shadow-sm text-center">
+                                <div class="text-orange font-bold text-xl mb-1">5</div>
+                                <div class="text-sm font-semibold text-navy">Varian Rasa</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-2xl border border-navy/5 shadow-sm text-center">
+                                <div class="text-orange font-bold text-xl mb-1">25</div>
+                                <div class="text-sm font-semibold text-navy">Drip Bag</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VARIAN SECTION (Diperbaiki: Slider 3 Item) -->
+    <section id="varian" class="py-16 md:py-24 overflow-hidden">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-heading text-3xl md:text-4xl font-bold mb-4 text-navy">Pilih Rasamu</h2>
+                <p class="text-navy/70 max-w-2xl mx-auto">Geser untuk menemukan varian yang paling cocok dengan seleramu.</p>
+            </div>
+
+            <!-- Slider Container -->
+            <div class="relative">
+                <div class="slider-container" id="product-slider">
+                    
+                    <!-- Card 1: Classic -->
+                    <div class="slider-item bg-white rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 border border-navy/5 flex flex-col product-card" data-id="classic" data-name="Classic Espresso" data-price="85000" data-color="#1E2B58">
+                        <div class="relative aspect-square mb-4 bg-cream/50 rounded-2xl overflow-hidden flex items-center justify-center">
+                            <img src="assets/kopi-classic.png" alt="Kemasan Classic Espresso" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold" style="color: #1E2B58">100% Arabica</div>
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-heading font-bold text-xl text-navy">Classic Espresso</h3>
+                                <span class="font-bold text-navy">Rp 85.000</span>
+                            </div>
+                            <p class="text-sm text-navy/60 mb-4 flex-1">Rich, Smooth, Balanced. Rasa klasik yang tak lekang waktu.</p>
+                            <div class="flex items-center justify-between mt-auto bg-cream rounded-xl p-1">
+                                <button class="w-10 h-10 rounded-lg bg-white text-navy font-bold text-xl shadow-sm hover:bg-navy hover:text-white transition-colors btn-minus">-</button>
+                                <span class="font-semibold text-navy qty-display">0</span>
+                                <button class="w-10 h-10 rounded-lg text-white font-bold text-xl shadow-sm hover:opacity-90 transition-opacity btn-plus" style="background-color: #1E2B58">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Mix -->
+                    <div class="slider-item bg-white rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 border border-navy/5 flex flex-col product-card" data-id="mix" data-name="Mix Espresso" data-price="85000" data-color="#B35C37">
+                        <div class="relative aspect-square mb-4 bg-cream/50 rounded-2xl overflow-hidden flex items-center justify-center">
+                            <img src="assets/kopi-mix.png" alt="Kemasan Mix Espresso" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold" style="color: #B35C37">100% Arabica</div>
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-heading font-bold text-xl text-navy">Mix Espresso</h3>
+                                <span class="font-bold text-navy">Rp 85.000</span>
+                            </div>
+                            <p class="text-sm text-navy/60 mb-4 flex-1">Rich, Smooth, Balanced. Harmoni rasa dari berbagai biji pilihan.</p>
+                            <div class="flex items-center justify-between mt-auto bg-cream rounded-xl p-1">
+                                <button class="w-10 h-10 rounded-lg bg-white text-navy font-bold text-xl shadow-sm hover:bg-navy hover:text-white transition-colors btn-minus">-</button>
+                                <span class="font-semibold text-navy qty-display">0</span>
+                                <button class="w-10 h-10 rounded-lg text-white font-bold text-xl shadow-sm hover:opacity-90 transition-opacity btn-plus" style="background-color: #B35C37">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Berry -->
+                    <div class="slider-item bg-white rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 border border-navy/5 flex flex-col product-card" data-id="berry" data-name="Berry Espresso" data-price="85000" data-color="#972347">
+                        <div class="relative aspect-square mb-4 bg-cream/50 rounded-2xl overflow-hidden flex items-center justify-center">
+                            <img src="assets/kopi-berry.png" alt="Kemasan Berry Espresso" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold" style="color: #972347">100% Arabica</div>
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-heading font-bold text-xl text-navy">Berry Espresso</h3>
+                                <span class="font-bold text-navy">Rp 85.000</span>
+                            </div>
+                            <p class="text-sm text-navy/60 mb-4 flex-1">Fruity, Sweet, Vibrant. Sentuhan buah beri yang seimbang.</p>
+                            <div class="flex items-center justify-between mt-auto bg-cream rounded-xl p-1">
+                                <button class="w-10 h-10 rounded-lg bg-white text-navy font-bold text-xl shadow-sm hover:bg-navy hover:text-white transition-colors btn-minus">-</button>
+                                <span class="font-semibold text-navy qty-display">0</span>
+                                <button class="w-10 h-10 rounded-lg text-white font-bold text-xl shadow-sm hover:opacity-90 transition-opacity btn-plus" style="background-color: #972347">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Grape -->
+                    <div class="slider-item bg-white rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 border border-navy/5 flex flex-col product-card" data-id="grape" data-name="Grape Espresso" data-price="85000" data-color="#462366">
+                        <div class="relative aspect-square mb-4 bg-cream/50 rounded-2xl overflow-hidden flex items-center justify-center">
+                            <img src="assets/kopi-grape.png" alt="Kemasan Grape Espresso" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold" style="color: #462366">100% Arabica</div>
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-heading font-bold text-xl text-navy">Grape Espresso</h3>
+                                <span class="font-bold text-navy">Rp 85.000</span>
+                            </div>
+                            <p class="text-sm text-navy/60 mb-4 flex-1">Fruity, Smooth, Elegant. Aroma anggur yang unik dan aromatik.</p>
+                            <div class="flex items-center justify-between mt-auto bg-cream rounded-xl p-1">
+                                <button class="w-10 h-10 rounded-lg bg-white text-navy font-bold text-xl shadow-sm hover:bg-navy hover:text-white transition-colors btn-minus">-</button>
+                                <span class="font-semibold text-navy qty-display">0</span>
+                                <button class="w-10 h-10 rounded-lg text-white font-bold text-xl shadow-sm hover:opacity-90 transition-opacity btn-plus" style="background-color: #462366">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Durian -->
+                    <div class="slider-item bg-white rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 border border-navy/5 flex flex-col product-card" data-id="durian" data-name="Durian Espresso" data-price="85000" data-color="#444D24">
+                        <div class="relative aspect-square mb-4 bg-cream/50 rounded-2xl overflow-hidden flex items-center justify-center">
+                            <img src="assets/kopi-durian.png" alt="Kemasan Durian Espresso" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold" style="color: #444D24">100% Arabica</div>
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-heading font-bold text-xl text-navy">Durian Espresso</h3>
+                                <span class="font-bold text-navy">Rp 85.000</span>
+                            </div>
+                            <p class="text-sm text-navy/60 mb-4 flex-1">Creamy, Rich, Unique. Perpaduan kopi dan aroma durian yang khas.</p>
+                            <div class="flex items-center justify-between mt-auto bg-cream rounded-xl p-1">
+                                <button class="w-10 h-10 rounded-lg bg-white text-navy font-bold text-xl shadow-sm hover:bg-navy hover:text-white transition-colors btn-minus">-</button>
+                                <span class="font-semibold text-navy qty-display">0</span>
+                                <button class="w-10 h-10 rounded-lg text-white font-bold text-xl shadow-sm hover:opacity-90 transition-opacity btn-plus" style="background-color: #444D24">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DRIP BAG SECTION -->
+    <section id="drip-bag" class="py-16 bg-navy text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-orange rounded-full blur-3xl opacity-20 -mr-32 -mt-32"></div>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="flex-1 order-2 md:order-1">
+                    <h2 class="font-heading text-3xl md:text-4xl font-bold mb-6">Praktis, Tanpa Ribet.</h2>
+                    <p class="text-white/70 leading-relaxed mb-6">
+                        Setiap kemasan Kopikulo berisi 25 drip bag. Cukup sobek, gantung di cangkir, dan seduh dengan air panas. Tidak perlu mesin espresso atau alat seduh mahal.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3">
+                            <div class="bg-orange/20 p-1.5 rounded-full mt-0.5">
+                                <svg class="w-4 h-4 text-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <span class="text-white/80">Cocok untuk dibawa bepergian atau ke kantor.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="bg-orange/20 p-1.5 rounded-full mt-0.5">
+                                <svg class="w-4 h-4 text-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <span class="text-white/80">Rasa tetap konsisten dan segar di setiap seduhan.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="bg-orange/20 p-1.5 rounded-full mt-0.5">
+                                <svg class="w-4 h-4 text-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <span class="text-white/80">Minimalis, cukup air panas dan cangkir favoritmu.</span>
+                        </li>
+                    </ul>
+                    <a href="#varian" class="inline-block bg-orange text-white px-8 py-3.5 rounded-full font-semibold hover:bg-orange/90 transition-all shadow-lg shadow-orange/20">Coba Drip Bag</a>
+                </div>
+                <div class="flex-1 order-1 md:order-2 w-full">
+                    <img src="assets/drip-bag-mixed.png" alt="Sachet Drip Bag Kopikulo" class="w-full max-w-md mx-auto md:max-w-full drop-shadow-2xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONI SECTION -->
+    <section class="py-16 bg-cream">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="font-heading text-3xl md:text-4xl font-bold mb-12 text-center text-navy">Kata Mereka</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Testi 1 -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-navy/5">
+                    <div class="flex text-gold mb-4">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    </div>
+                    <p class="text-navy/80 italic mb-4">"Aroma kopinya enak banget, rasanya smooth dan nggak terlalu pahit. Cocok buat teman kerja pagi hari!"</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-navy text-white flex items-center justify-center font-bold text-sm">NP</div>
+                        <div>
+                            <p class="font-bold text-navy text-sm">Nadia P.</p>
+                            <p class="text-xs text-navy/50">Classic Espresso</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testi 2 -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-navy/5">
+                    <div class="flex text-gold mb-4">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    </div>
+                    <p class="text-navy/80 italic mb-4">"Awalnya penasaran sama rasa berry-nya, ternyata menarik! Ada sensasi fruity yang bikin pengalaman ngopi jadi beda."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-berry text-white flex items-center justify-center font-bold text-sm">AR</div>
+                        <div>
+                            <p class="font-bold text-navy text-sm">Arif R.</p>
+                            <p class="text-xs text-navy/50">Berry Espresso</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testi 3 -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-navy/5">
+                    <div class="flex text-gold mb-4">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    </div>
+                    <p class="text-navy/80 italic mb-4">"Suka banget sama aroma anggurnya. Rasanya unik, aromatik, dan cocok buat yang ingin mencoba sesuatu yang berbeda."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-grape text-white flex items-center justify-center font-bold text-sm">DA</div>
+                        <div>
+                            <p class="font-bold text-navy text-sm">Dinda A.</p>
+                            <p class="text-xs text-navy/50">Grape Espresso</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CARA PESAN SECTION -->
+    <section id="cara-pesan" class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="font-heading text-3xl md:text-4xl font-bold mb-4 text-navy">Cara Pesan</h2>
+            <p class="text-navy/70 mb-12">Hanya butuh 3 langkah mudah untuk menikmati Kopikulo.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-full bg-cream flex items-center justify-center text-orange font-heading font-bold text-2xl mb-4 border-2 border-orange/20">1</div>
+                    <h3 class="font-bold text-lg text-navy mb-2">Pilih Varian</h3>
+                    <p class="text-sm text-navy/60">Tentukan varian dan jumlah yang ingin dipesan.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-full bg-cream flex items-center justify-center text-orange font-heading font-bold text-2xl mb-4 border-2 border-orange/20">2</div>
+                    <h3 class="font-bold text-lg text-navy mb-2">Isi Data</h3>
+                    <p class="text-sm text-navy/60">Lengkapi nama, alamat pengiriman, dan catatan (jika ada).</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-full bg-cream flex items-center justify-center text-orange font-heading font-bold text-2xl mb-4 border-2 border-orange/20">3</div>
+                    <h3 class="font-bold text-lg text-navy mb-2">Kirim via WA</h3>
+                    <p class="text-sm text-navy/60">Pesanan otomatis terformat dan dikirim ke WhatsApp kami.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-navy text-white pt-16 pb-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
+                <div class="text-center md:text-left">
+                    <div class="flex items-center gap-2 justify-center md:justify-start mb-4">
+                        <img src="assets/logo-kopikulo.png" alt="Logo Kopikulo" class="h-8 w-auto brightness-0 invert">
+                        <span class="font-heading font-bold text-2xl tracking-tight">Kopikulo</span>
+                    </div>
+                    <p class="text-white/60 text-sm max-w-xs mx-auto md:mx-0">Good coffee, better days. Kopi lokal Kulon Progo untuk harimu.</p>
+                </div>
+                
+                <div class="flex gap-8 text-sm">
+                    <div class="flex flex-col gap-2">
+                        <span class="font-bold text-white mb-2">Menu</span>
+                        <a href="#kopi" class="text-white/60 hover:text-orange transition-colors">Kopi</a>
+                        <a href="#drip-bag" class="text-white/60 hover:text-orange transition-colors">Drip Bag</a>
+                        <a href="#cerita" class="text-white/60 hover:text-orange transition-colors">Cerita</a>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <span class="font-bold text-white mb-2">Bantuan</span>
+                        <a href="#cara-pesan" class="text-white/60 hover:text-orange transition-colors">Cara Pesan</a>
+                        <a href="#" class="text-white/60 hover:text-orange transition-colors">FAQ</a>
+                        <a href="#" class="text-white/60 hover:text-orange transition-colors">Kontak</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/40">
+                <p>&copy; 2024 Kopikulo. All rights reserved.</p>
+                <p>Dibuat dengan ❤️ di Kulon Progo</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MOBILE STICKY BAR (Lihat Pesanan) -->
+    <div id="mobile-bottom-bar" class="fixed bottom-0 left-0 right-0 bg-white border-t border-navy/10 p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-40 md:hidden transform translate-y-full transition-transform duration-300">
+        <button id="btn-checkout-mobile" class="w-full bg-orange text-white py-3 rounded-xl font-bold flex justify-between items-center px-4 shadow-lg shadow-orange/30">
+            <span>Lihat Pesanan</span>
+            <span id="mobile-total-items" class="bg-white/20 px-2 py-0.5 rounded text-sm">0 Item</span>
+        </button>
+    </div>
+
+    <!-- MODAL CHECKOUT (POPUP) -->
+    <div id="checkout-modal" class="fixed inset-0 z-[100] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-navy/60 backdrop-blur-sm transition-opacity" id="modal-backdrop"></div>
+        
+        <!-- Modal Content -->
+        <div class="absolute bottom-0 left-0 right-0 md:relative md:bottom-auto md:left-auto md:right-auto md:top-1/2 md:-translate-y-1/2 md:mx-auto md:max-w-lg bg-cream w-full rounded-t-3xl md:rounded-3xl shadow-2xl transform transition-transform duration-300 translate-y-full md:translate-y-0" id="modal-content">
+            <!-- Header -->
+            <div class="p-5 border-b border-navy/10 flex justify-between items-center bg-white rounded-t-3xl">
+                <h3 class="font-heading font-bold text-xl text-navy">Konfirmasi Pesanan</h3>
+                <button id="close-modal" class="p-2 rounded-full hover:bg-navy/5 transition-colors">
+                    <svg class="w-6 h-6 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-5 max-h-[60vh] overflow-y-auto">
+                <!-- Ringkasan Item -->
+                <div id="modal-item-list" class="mb-6 space-y-3">
+                    <!-- Item akan diisi via JS -->
+                </div>
+                
+                <div class="border-t border-navy/10 pt-4 mb-6">
+                    <div class="flex justify-between items-center font-bold text-lg text-navy">
+                        <span>Total</span>
+                        <span id="modal-total-price">Rp 0</span>
+                    </div>
+                    <p class="text-xs text-navy/50 mt-1">Belum termasuk ongkos kirim.</p>
+                </div>
+
+                <!-- Form Data -->
+                <form id="order-form" class="space-y-4">
+                    <div>
+                        <label for="nama" class="block text-sm font-semibold text-navy mb-1">Nama Lengkap</label>
+                        <input type="text" id="nama" required class="w-full px-4 py-3 rounded-xl border border-navy/20 focus:outline-none focus:ring-2 focus:ring-orange focus:border-transparent bg-white" placeholder="Masukkan nama">
+                    </div>
+                    <div>
+                        <label for="alamat" class="block text-sm font-semibold text-navy mb-1">Alamat Pengiriman</label>
+                        <textarea id="alamat" required rows="2" class="w-full px-4 py-3 rounded-xl border border-navy/20 focus:outline-none focus:ring-2 focus:ring-orange focus:border-transparent bg-white" placeholder="Tulis alamat lengkap"></textarea>
+                    </div>
+                    <div>
+                        <label for="catatan" class="block text-sm font-semibold text-navy mb-1">Catatan (Opsional)</label>
+                        <input type="text" id="catatan" class="w-full px-4 py-3 rounded-xl border border-navy/20 focus:outline-none focus:ring-2 focus:ring-orange focus:border-transparent bg-white" placeholder="Contoh: Pengiriman instan">
+                    </div>
+                </form>
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="p-5 bg-white rounded-b-3xl border-t border-navy/10">
+                <button id="btn-wa" class="w-full bg-[#25D366] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] transition-colors shadow-lg shadow-green-500/30">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    Pesan via WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // State
+            const cart = {};
+            const phoneNumber = '6285643000000'; // Format internasional tanpa +
+
+            // Elements
+            const cards = document.querySelectorAll('.product-card');
+            const mobileBar = document.getElementById('mobile-bottom-bar');
+            const mobileTotalItems = document.getElementById('mobile-total-items');
+            const btnCheckoutMobile = document.getElementById('btn-checkout-mobile');
+            const modal = document.getElementById('checkout-modal');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const modalContent = document.getElementById('modal-content');
+            const closeModalBtn = document.getElementById('close-modal');
+            const modalItemList = document.getElementById('modal-item-list');
+            const modalTotalPrice = document.getElementById('modal-total-price');
+            const orderForm = document.getElementById('order-form');
+            const btnWa = document.getElementById('btn-wa');
+
+            // Navbar Elements for Highlight
+            const navBtnPesan = document.getElementById('nav-btn-pesan');
+            const navCartBadge = document.getElementById('nav-cart-badge');
+            const mobileNavBtnPesan = document.getElementById('mobile-nav-btn-pesan');
+            const mobileNavCartBadge = document.getElementById('mobile-nav-cart-badge');
+
+            // Format Rupiah
+            const formatRupiah = (number) => {
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+            };
+
+            // Update UI
+            const updateUI = () => {
+                let totalItems = 0;
+                let totalPrice = 0;
+
+                // Reset display
+                cards.forEach(card => {
+                    card.querySelector('.qty-display').textContent = '0';
+                });
+
+                // Update from cart state
+                Object.keys(cart).forEach(id => {
+                    const item = cart[id];
+                    if (item.qty > 0) {
+                        totalItems += item.qty;
+                        totalPrice += item.qty * item.price;
+                        
+                        const card = document.querySelector(`.product-card[data-id="${id}"]`);
+                        if (card) {
+                            card.querySelector('.qty-display').textContent = item.qty;
+                        }
+                    }
+                });
+
+                // Update Mobile Bar
+                if (totalItems > 0) {
+                    mobileTotalItems.textContent = `${totalItems} Item`;
+                    mobileBar.classList.remove('translate-y-full');
+                    
+                    // Highlight Navbar Buttons
+                    navBtnPesan.classList.remove('bg-navy', 'shadow-navy/20');
+                    navBtnPesan.classList.add('bg-orange', 'shadow-orange/30', 'animate-pulse');
+                    
+                    navCartBadge.classList.remove('hidden');
+                    navCartBadge.textContent = totalItems;
+
+                    mobileNavBtnPesan.classList.remove('bg-navy');
+                    mobileNavBtnPesan.classList.add('bg-orange');
+                    
+                    mobileNavCartBadge.classList.remove('hidden');
+                    mobileNavCartBadge.textContent = totalItems;
+
+                } else {
+                    mobileBar.classList.add('translate-y-full');
+                    
+                    // Remove Highlight Navbar Buttons
+                    navBtnPesan.classList.add('bg-navy', 'shadow-navy/20');
+                    navBtnPesan.classList.remove('bg-orange', 'shadow-orange/30', 'animate-pulse');
+                    
+                    navCartBadge.classList.add('hidden');
+
+                    mobileNavBtnPesan.classList.add('bg-navy');
+                    mobileNavBtnPesan.classList.remove('bg-orange');
+                    
+                    mobileNavCartBadge.classList.add('hidden');
+                }
+
+                // Update Modal if open
+                if (!modal.classList.contains('hidden')) {
+                    renderModalContent(totalItems, totalPrice);
+                }
+            };
+
+            // Render Modal Content
+            const renderModalContent = (totalItems, totalPrice) => {
+                modalItemList.innerHTML = '';
+                
+                if (totalItems === 0) {
+                    modalItemList.innerHTML = '<p class="text-center text-navy/60 py-4">Belum ada item yang dipilih.</p>';
+                    modalTotalPrice.textContent = 'Rp 0';
+                    return;
+                }
+
+                Object.keys(cart).forEach(id => {
+                    const item = cart[id];
+                    if (item.qty > 0) {
+                        const div = document.createElement('div');
+                        div.className = 'flex justify-between items-center text-sm';
+                        div.innerHTML = `
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full" style="background-color: ${item.color}"></span>
+                                <span class="font-medium text-navy">${item.name}</span>
+                                <span class="text-navy/50">x${item.qty}</span>
+                            </div>
+                            <span class="font-semibold text-navy">${formatRupiah(item.qty * item.price)}</span>
+                        `;
+                        modalItemList.appendChild(div);
+                    }
+                });
+                
+                modalTotalPrice.textContent = formatRupiah(totalPrice);
+            };
+
+            // Event Listeners for +/- buttons
+            cards.forEach(card => {
+                const id = card.dataset.id;
+                const name = card.dataset.name;
+                const price = parseInt(card.dataset.price);
+                const color = card.dataset.color;
+                const btnMinus = card.querySelector('.btn-minus');
+                const btnPlus = card.querySelector('.btn-plus');
+
+                // Init state if not exists
+                if (!cart[id]) {
+                    cart[id] = { name, price, color, qty: 0 };
+                }
+
+                btnPlus.addEventListener('click', () => {
+                    cart[id].qty += 1;
+                    updateUI();
+                });
+
+                btnMinus.addEventListener('click', () => {
+                    if (cart[id].qty > 0) {
+                        cart[id].qty -= 1;
+                        updateUI();
+                    }
+                });
+            });
+
+            // Modal Open/Close
+            const openModal = () => {
+                let totalItems = 0;
+                let totalPrice = 0;
+                Object.values(cart).forEach(item => {
+                    totalItems += item.qty;
+                    totalPrice += item.qty * item.price;
+                });
+                
+                if (totalItems === 0) {
+                    alert('Silakan pilih varian kopi terlebih dahulu.');
+                    return;
+                }
+
+                renderModalContent(totalItems, totalPrice);
+                
+                modal.classList.remove('hidden');
+                // Trigger reflow
+                void modal.offsetWidth;
+                modalBackdrop.classList.add('opacity-100');
+                modalContent.classList.remove('translate-y-full');
+            };
+
+            const closeModal = () => {
+                modalBackdrop.classList.remove('opacity-100');
+                modalContent.classList.add('translate-y-full');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            };
+
+            btnCheckoutMobile.addEventListener('click', openModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            modalBackdrop.addEventListener('click', closeModal);
+
+            // Form Submit -> WhatsApp
+            btnWa.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Validasi form manual
+                const nama = document.getElementById('nama').value.trim();
+                const alamat = document.getElementById('alamat').value.trim();
+                const catatan = document.getElementById('catatan').value.trim();
+
+                if (!nama || !alamat) {
+                    alert('Mohon lengkapi Nama dan Alamat Pengiriman.');
+                    return;
+                }
+
+                // Susun pesan
+                let message = `Halo Kopikulo, saya ingin memesan:\n\n`;
+                let totalPrice = 0;
+                
+                Object.keys(cart).forEach(id => {
+                    const item = cart[id];
+                    if (item.qty > 0) {
+                        message += `- ${item.name} (${item.qty}x) = ${formatRupiah(item.qty * item.price)}\n`;
+                        totalPrice += item.qty * item.price;
+                    }
+                });
+
+                message += `\n*Total: ${formatRupiah(totalPrice)}*\n\n`;
+                message += `*Data Pengiriman:*\n`;
+                message += `Nama: ${nama}\n`;
+                message += `Alamat: ${alamat}\n`;
+                if (catatan) {
+                    message += `Catatan: ${catatan}\n`;
+                }
+                message += `\nMohon konfirmasi ketersediaan dan total akhirnya. Terima kasih!`;
+
+                // Encode dan buka WA
+                const encodedMessage = encodeURIComponent(message);
+                const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+                
+                window.open(waUrl, '_blank');
+                
+                // Reset form dan tutup modal (opsional)
+                orderForm.reset();
+                closeModal();
+            });
+        });
+    </script>
+</body>
+</html>
