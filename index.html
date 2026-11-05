@@ -61,6 +61,7 @@
     .slider-track { display: flex; gap: var(--gap); overflow-x: auto; padding: 4px; scroll-padding-inline: 4px; scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; scrollbar-width: none; }
     .slider-track::-webkit-scrollbar { display: none; }
     .slide { flex: 0 0 calc((100% - var(--gap) * (var(--per) - 1)) / var(--per)); scroll-snap-align: start; scroll-snap-stop: always; }
+    .slider-track { position: relative; /* ...properti lain tetap */ }
 
     /* Tombol Pesan: sorot saat sudah ada item */
     .site-header .btn-pesan.has-items { box-shadow: 0 0 0 2px #F3EBE1, 0 0 0 4px #1E2B58; }
